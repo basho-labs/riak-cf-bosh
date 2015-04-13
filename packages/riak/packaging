@@ -6,7 +6,7 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 set +x
 
-RIAK_VERSION=1.4.10
+RIAK_VERSION=2.0.5
 export HOME=/var/vcap
 export PATH=/var/vcap/packages/git/bin:/var/vcap/packages/erlang/bin:$PATH
 
@@ -18,7 +18,6 @@ make rel
 
 # output is in rel/riak
 cp -prv rel/riak ${BOSH_INSTALL_TARGET}/rel
-echo "+zdbbl 32768" >> ${BOSH_INSTALL_TARGET}/rel/etc/vm.args
 
 # create a symlinked dir that has no version number for libraries directly accessed by the job
 ln -s ${BOSH_INSTALL_TARGET}/rel/lib/eleveldb-* ${BOSH_INSTALL_TARGET}/rel/lib/eleveldb

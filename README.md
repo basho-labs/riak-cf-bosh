@@ -34,21 +34,22 @@ Set the subnet to the network created when deploying bosh to AWS.
 ```
   subnet: subnet-6c892647
 ```
+
 ##### Download stemcell
 
 ```
 bosh public stemcells
 bosh download public stemcell bosh-aws-xen-ubuntu-trusty-go_agent
+bosh upload stemcell bosh-stemcell-2719.3-aws-xen-ubuntu-trusty-go_agent.tgz 
 ```
 ##### Upload release
 ```
-bosh create release
-bosh release example/bosh-aws.yml
+bosh deployment examples/bosh-aws.yml
+bosh create release --force
 bosh upload release
 ```
 ##### Deploy release
 ```
-bosh deployment example/bosh-aws.yml
 bosh deploy
 ```
 
