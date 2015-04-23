@@ -6,19 +6,9 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 set +x
 
-RIAK_VERSION=2.0.5
+RIAK_VERSION=2.0.5-ubuntu-trusty-amd64
 export HOME=/var/vcap
-export PATH=/var/vcap/packages/git/bin:/var/vcap/packages/erlang/bin:$PATH
 
 tar xzf riak/riak-${RIAK_VERSION}.tar.gz
 
-# Compile riak
-cd ${BOSH_COMPILE_TARGET}/riak-${RIAK_VERSION}
-make rel
-
-# output is in rel/riak
-cp -prv rel/riak ${BOSH_INSTALL_TARGET}/rel
-
-# create a symlinked dir that has no version number for libraries directly accessed by the job
-ln -s ${BOSH_INSTALL_TARGET}/rel/lib/eleveldb-* ${BOSH_INSTALL_TARGET}/rel/lib/eleveldb
-ln -s ${BOSH_INSTALL_TARGET}/rel/lib/bitcask-* ${BOSH_INSTALL_TARGET}/rel/lib/bitcask
+cp -prv riak-${RIAK_VERSION}/* ${BOSH_INSTALL_TARGET}/

@@ -17,21 +17,21 @@ mkdir -p `dirname $LOG_FILE`
 mkdir -p `dirname $ERR_FILE`
 
 log_position
-/var/vcap/packages/riak/rel/bin/riak-admin cluster join riak@$SEED_NODE >> $LOG_FILE 2>>$ERR_FILE
+/var/vcap/packages/riak/bin/riak-admin cluster join riak@$SEED_NODE >> $LOG_FILE 2>>$ERR_FILE
 join_cluster_status=$?
 if [ $join_cluster_status -eq 0 ]
 then
   log_position
-  /var/vcap/packages/riak/rel/bin/riak-admin cluster plan >> $LOG_FILE 2>>$ERR_FILE
+  /var/vcap/packages/riak/bin/riak-admin cluster plan >> $LOG_FILE 2>>$ERR_FILE
   log_position
-  /var/vcap/packages/riak/rel/bin/riak-admin cluster commit >> $LOG_FILE 2>>$ERR_FILE
+  /var/vcap/packages/riak/bin/riak-admin cluster commit >> $LOG_FILE 2>>$ERR_FILE
 
   is_ready=false
 
   while [ "$is_ready" == "false" ]
   do
     log_position
-    ring_ready=`/var/vcap/packages/riak/rel/bin/riak-admin ring_status | grep 'Ring Ready'`
+    ring_ready=`/var/vcap/packages/riak/bin/riak-admin ring_status | grep 'Ring Ready'`
     if [[ $ring_ready == *"true"* ]]
     then
       log_position "Ring Ready"

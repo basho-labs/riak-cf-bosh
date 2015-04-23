@@ -1,7 +1,4 @@
 --- 
 name: riak
-dependencies:
-- erlang
-- git
 files: 
-- riak/riak-2.0.5.tar.gz
+- riak/riak-2.0.5-ubuntu-trusty-amd64.tar.gz

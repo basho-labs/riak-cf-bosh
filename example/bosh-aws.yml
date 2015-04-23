@@ -1,5 +1,5 @@
 name: riak-aws
-director_uuid: 42e99fc6-2c3b-4c20-8e72-f843efb25c13
+director_uuid: 38090f66-14c7-416b-abb5-2daa5140c5cf
 
 releases:
 - name: riak
@@ -11,9 +11,8 @@ compilation:
   reuse_compilation_vms: true
   cloud_properties:
     name: random
-    instance_type: m1.small
-    availability_zone: us-east-1d
-    subnet: subnet-6c892647
+    instance_type: c3.large
+
 update:
   canaries: 1
   canary_watch_time: 30000-240000
@@ -23,64 +22,54 @@ update:
 resource_pools:
 - name: common
   network: riak-network
-  size: 4
+  size: 5
   stemcell:
     name: bosh-aws-xen-ubuntu-trusty-go_agent
     version: latest
   cloud_properties:
     name: random
-    instance_type: m1.small
-    availability_zone: us-east-1d
-    subnet: subnet-6c892647
+    instance_type: c3.large
 
 networks:
 - name: riak-network
   subnets:
-<% (0..28).each_with_index do |i| %>
-  - range: 10.0.1.<%= i*4 %>/30
+  - range: 10.0.0.0/24
+    gateway: 10.0.0.1
     reserved:
-      - 10.0.1.<%= i*4 + 1 %>
+      - 10.0.0.6
     static:
-      - 10.0.1.<%= i*4 + 2 %>
+      - 10.0.0.4
+      - 10.0.0.5
+      - 10.0.0.7
+      - 10.0.0.8
+      - 10.0.0.9
     cloud_properties:
-      name: random
-      subnet: subnet-6c892647
-<% end %>
-<% (29..61).each_with_index do |i| %>
-  - range: 10.0.1.<%= i*4 %>/30
-    reserved:
-      - 10.0.1.<%= i*4 + 1 %>
-    cloud_properties:
-      name: random
-      instance_type: m1.small
-      availability_zone: us-east-1d
-      subnet: subnet-6c892647
-<% end %>
-<% (62..63).each_with_index do |i| %>
-  - range: 10.0.1.<%= i*4 %>/30
-    reserved:
-      - 10.0.1.<%= i*4 + 1 %>
-    static:
-      - 10.0.1.<%= i*4 + 2 %>
-    cloud_properties:
-      name: random
-      subnet: subnet-6c892647
-<% end %>
+      subnet: subnet-a379d6c6
 
 jobs: 
-- name: riak
+- instances: 5
   template: riak
-  instances: 4
+  name: riak
   resource_pool: common
   networks:
   - name: riak-network
     static_ips:
-    - 10.0.1.2
-    - 10.0.1.6
-    - 10.0.1.10
-    - 10.0.1.14
+    - 10.0.0.4
+    - 10.0.0.5
+    - 10.0.0.7
+    - 10.0.0.8
+    - 10.0.0.9
   persistent_disk: 4096
-
 properties:
   riak:
-    seed_node: 10.0.1.2
+    seed_node: 10.0.0.4
+
+cloud:
+  plugin: aws
+  properties:
+    aws:
+      access_key_id: AESKEY # Replace with your AWSAccessKeyId
+      secret_access_key: AWSSECRET # Replace with your AWSSecretKey
+      region: us-west-1
+      default_key_name: bosh
+      default_security_groups: ["bosh"]
