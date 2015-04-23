@@ -13,7 +13,9 @@ Deploy Riak
 ```
 git clone https://github.com/basho-labs/riak-cf-bosh
 cd riak-cf-bosh
-vi example/bosh-aws.yml
+mkdir tmp
+cp example/bosh-aws.yml tmp/
+vi tmp/bosh-aws.yml
 ```
 Edit config values for your environment:
 ##### Set the uuid 
@@ -37,14 +39,16 @@ Set the subnet to the network created when deploying bosh to AWS.
 
 ##### Download stemcell
 
+###### Note: Riak package is currently only built for Ubunty Trusty
+
 ```
 bosh public stemcells
 bosh download public stemcell bosh-aws-xen-ubuntu-trusty-go_agent
-bosh upload stemcell bosh-stemcell-2719.3-aws-xen-ubuntu-trusty-go_agent.tgz 
+bosh upload stemcell bosh-stemcell-2941-aws-xen-ubuntu-trusty-go_agent.tgz
 ```
 ##### Upload release
 ```
-bosh deployment examples/bosh-aws.yml
+bosh deployment tmp/bosh-aws.yml
 bosh create release --force
 bosh upload release
 ```
