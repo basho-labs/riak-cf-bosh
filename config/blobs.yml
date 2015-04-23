@@ -1,17 +1,6 @@
 ---
-erlang/otp_src_R15B01.tar.gz:
-  object_id: c3bdb26f-a824-4097-b13d-0ad7c153edb9
-  sha: c6e1f2fad965deb3696184c1ee16472bcea2bf22
-  size: 75592537
-git/git-1.8.4.tar.gz:
-  object_id: 420f299b-0211-4e72-b174-49af7594a70f
-  sha: a238f2b527365b896b8ec447b3e5ab5d7b4a2c5a
-  size: 4657745
-python/Python-2.7.8.tgz:
-  object_id: 714c579e-eb50-4b8a-bd4b-b9317f784249
-  sha: 511960dd78451a06c9df76509635aeec05b2051a
-  size: 14846119
-riak/riak-1.4.10.tar.gz:
-  object_id: 7fa783b8-983b-422f-8f29-089ae16ed366
-  sha: ff55a50ea3d8555217b447bc405251dbd333ed46
-  size: 13815356
+riak/riak-2.1.0-ubuntu-trusty-amd64.tar.gz:
+  object_id: 7aa25fbe-8968-4ac5-aaf9-5e142afc3b3e
+  sha: !binary |-
+    OGQ3ODhmMjAzYTI1MjdjYjI2M2I2ZjE5ZDZiZGM4OTg1MmExNWQyYw==
+  size: 69916848
