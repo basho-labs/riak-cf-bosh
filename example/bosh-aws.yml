@@ -1,0 +1,75 @@
+name: riak-aws
+director_uuid: 38090f66-14c7-416b-abb5-2daa5140c5cf
+
+releases:
+- name: riak
+  version: latest
+
+compilation:
+  workers: 2
+  network: riak-network
+  reuse_compilation_vms: true
+  cloud_properties:
+    name: random
+    instance_type: c3.large
+
+update:
+  canaries: 1
+  canary_watch_time: 30000-240000
+  update_watch_time: 30000-600000
+  max_in_flight: 3
+
+resource_pools:
+- name: common
+  network: riak-network
+  size: 5
+  stemcell:
+    name: bosh-aws-xen-ubuntu-trusty-go_agent
+    version: latest
+  cloud_properties:
+    name: random
+    instance_type: c3.large
+
+networks:
+- name: riak-network
+  subnets:
+  - range: 10.0.0.0/24
+    gateway: 10.0.0.1
+    reserved:
+      - 10.0.0.6
+    static:
+      - 10.0.0.4
+      - 10.0.0.5
+      - 10.0.0.7
+      - 10.0.0.8
+      - 10.0.0.9
+    cloud_properties:
+      subnet: subnet-a379d6c6
+
+jobs: 
+- instances: 5
+  template: riak
+  name: riak
+  resource_pool: common
+  networks:
+  - name: riak-network
+    static_ips:
+    - 10.0.0.4
+    - 10.0.0.5
+    - 10.0.0.7
+    - 10.0.0.8
+    - 10.0.0.9
+  persistent_disk: 4096
+properties:
+  riak:
+    seed_node: 10.0.0.4
+
+cloud:
+  plugin: aws
+  properties:
+    aws:
+      access_key_id: AESKEY # Replace with your AWSAccessKeyId
+      secret_access_key: AWSSECRET # Replace with your AWSSecretKey
+      region: us-west-1
+      default_key_name: bosh
+      default_security_groups: ["bosh"]

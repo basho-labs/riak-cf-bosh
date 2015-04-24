@@ -23,7 +23,7 @@ PIDFILE=$RUN_DIR/riak.pid
 export PATH=/var/vcap/packages/ruby/bin:$PATH
 export HOME=/var/vcap
 
-COMMAND=${COMMAND:-/var/vcap/packages/riak/rel/bin/riak start}
+COMMAND=${COMMAND:-/var/vcap/packages/riak/bin/riak start}
 HOME=${HOME:-/home/vcap}
 
 case $1 in
@@ -34,18 +34,17 @@ case $1 in
     mkdir -p $STORE
 
     # Put the config files in place
-    cp /var/vcap/jobs/riak/config/app.config /var/vcap/packages/riak/rel/etc/app.config
-    cp /var/vcap/jobs/riak/config/vm.args /var/vcap/packages/riak/rel/etc/vm.args
+    cp /var/vcap/jobs/riak/config/riak.conf /var/vcap/packages/riak/etc/riak.conf
   	
     # Set the max open file limit
     ulimit -n 65536
 
     # Update vm.args with current IP address
     IP_ADDR=`ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}' | tail -1`
-    sed -i "s/127.0.0.1/$IP_ADDR/" /var/vcap/packages/riak/rel/etc/vm.args
+    sed -i "s/127.0.0.1/$IP_ADDR/" /var/vcap/packages/riak/etc/riak.conf
   	
     # Start riak
-    /var/vcap/packages/riak/rel/bin/riak start
+    /var/vcap/packages/riak/bin/riak start
     ps -A | grep beam | sed -e 's/^[ \t]*//' | awk '{split($0,a,/ /); print a[1]}' > $PIDFILE
   	
     # Join the cluster if we arn't the seed node
@@ -56,7 +55,7 @@ case $1 in
     ;;
 
   stop)
-    /var/vcap/packages/riak/rel/bin/riak stop
+    /var/vcap/packages/riak/bin/riak stop
     rm -f $PIDFILE
     ;;
 
